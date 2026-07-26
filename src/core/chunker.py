@@ -22,8 +22,8 @@ class Chunker:
             for i, chunk in enumerate(chunks, 1):
                 source_name = chunk.metadata.get("source_name", "unknown")
                 f.write(
-                    f"Чанк {i}\n"
-                    f"Источник: {source_name}\n"
+                    f"Chunk {i}\n"
+                    f"Source: {source_name}\n"
                     + str(chunk.page_content)
-                    + f"\n{'-' * 80}\n"
+                    + f"\n{'-' * 40}\n"
                 )
