@@ -1,3 +1,5 @@
+import atexit
+
 from langchain_core.documents import Document
 from langchain_qdrant import FastEmbedSparse, QdrantVectorStore, RetrievalMode
 from qdrant_client import QdrantClient, models
@@ -14,6 +16,7 @@ class VectorStore:
         sparse_model: str = "Qdrant/bm25",
     ):
         self.client = QdrantClient(path=path)
+        atexit.register(self.close)
         self.sparse_embeddings = FastEmbedSparse(model_name=sparse_model)
 
         if not self.client.collection_exists(collection_name):
@@ -43,3 +46,7 @@ class VectorStore:
 
     def search(self, query: str, k: int = 4) -> list[Document]:
         return self.vector_store.similarity_search(query=query, k=k)
+
+    def close(self) -> None:
+        if hasattr(self, "client") and self.client is not None:
+            self.client.close()
