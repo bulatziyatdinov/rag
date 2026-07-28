@@ -20,10 +20,9 @@ class Chunker:
         chunk_path = os.path.join(output_dir, "chunks.txt")
         with open(chunk_path, "w", encoding="utf-8") as f:
             for i, chunk in enumerate(chunks, 1):
-                source_name = chunk.metadata.get("source_name", "unknown")
                 f.write(
                     f"Chunk {i}\n"
-                    f"Source: {source_name}\n"
+                    f"Metadata: {chunk.metadata}\n"
                     + str(chunk.page_content)
                     + f"\n{'-' * 40}\n"
                 )
