@@ -1,11 +1,22 @@
-.venv
-venv
+# Venvs
+.venv/
+venv/
+.env/
+env/
 
-__pycache__
+# Cache
+__pycache__/
+.ruff_cache/
 
-.idea
-.vsocde
+# IDE
+.idea/
+.vscode/
 
+# Project
+store/
+chunks.txt
+data/*
+
+# other
 .env
-
-store
+*.log
