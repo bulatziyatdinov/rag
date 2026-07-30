@@ -13,11 +13,10 @@ class VectorStore:
         embedder: Embedder,
         path: str = "./store",
         collection_name: str = "rag",
-        sparse_model: str = "Qdrant/bm25",
     ):
         self.client = QdrantClient(path=path)
         atexit.register(self.close)
-        self.sparse_embeddings = FastEmbedSparse(model_name=sparse_model)
+        self.sparse_embeddings = FastEmbedSparse(model_name="Qdrant/bm25")
 
         if not self.client.collection_exists(collection_name):
             dense_dim = len(embedder.embeddings.embed_query("test"))

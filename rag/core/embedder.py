@@ -7,4 +7,5 @@ class Embedder:
         self.embeddings = OllamaEmbeddings(
             model=model,
             base_url=base_url,
+            validate_model_on_init=True,
         )

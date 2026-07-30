@@ -21,6 +21,7 @@ select = [
 ]
 
 ignore = [
+    "RUF001",
     #"E501",
 ]
 
@@ -36,7 +37,7 @@ extend-select = [
 #"tests/**/*.py" = ["S101"]
 
 [format]
-quote-style = "single"
+quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
 #preview = true

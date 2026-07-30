@@ -14,6 +14,7 @@ __pycache__/
 
 # Project
 store/
+.store/
 chunks.txt
 data/*
 
