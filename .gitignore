@@ -1,3 +1,5 @@
+.git
+
 # Venvs
 .venv/
 venv/
@@ -15,8 +17,8 @@ __pycache__/
 # Project
 store/
 .store/
-chunks.txt
 data/*
+chunks.txt
 
 # other
 .env

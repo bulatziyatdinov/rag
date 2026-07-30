@@ -1,4 +1,5 @@
 from .config import (
+    RAG_DATA_DIR,
     RAG_EMBEDDING_MODEL,
     RAG_LLM_MODEL,
     RAG_NUM_CTX,
@@ -39,6 +40,19 @@ def main():
             RAG_SEED,
         )
 
+        info_commands = ("Commands:\n"
+                "- info, i - information\n"
+                "- exit, e, quit, q - exit")
+
+        info = (f"[*] Information:"
+                f"LLM: {RAG_LLM_MODEL}\n"
+                f"Embeddings: {RAG_EMBEDDING_MODEL}\n"
+                f"Data folder: {RAG_DATA_DIR}\n"
+                f"Indexed data (Qdrant): {RAG_QDRANT_PATH}\n\n"
+                f"All settings store in .env file\n"
+                + info_commands)
+
+        print(info)
         while True:
             print("[QUESTION]: ", end="")
             query = input().strip()
@@ -47,7 +61,7 @@ def main():
 
             processed_query = query.lower().lstrip("/")
             if processed_query in {"info", "i"}:
-                print("TODO: INFO")
+                print(info)
             elif processed_query in {"exit", "e", "quit", "q"}:
                 break
             else:
