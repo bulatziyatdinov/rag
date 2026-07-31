@@ -1,3 +1,5 @@
+import time
+
 from .config import (
     RAG_DATA_DIR,
     RAG_EMBEDDING_MODEL,
@@ -44,20 +46,21 @@ def main():
                 "- info, i - information\n"
                 "- exit, e, quit, q - exit")
 
-        info = (f"[*] Information:"
+        info = (f"[*] RAG System [*]\n"
                 f"LLM: {RAG_LLM_MODEL}\n"
                 f"Embeddings: {RAG_EMBEDDING_MODEL}\n"
                 f"Data folder: {RAG_DATA_DIR}\n"
-                f"Indexed data (Qdrant): {RAG_QDRANT_PATH}\n\n"
-                f"All settings store in .env file\n"
+                f"Indexed data (Qdrant): {RAG_QDRANT_PATH}\n"
+                f"All settings store in .env file\n\n"
                 + info_commands)
-
         print(info)
+
         while True:
             print("[QUESTION]: ", end="")
             query = input().strip()
             if not query:
                 print("[WARNING]: Empty request")
+                continue
 
             processed_query = query.lower().lstrip("/")
             if processed_query in {"info", "i"}:
@@ -65,9 +68,17 @@ def main():
             elif processed_query in {"exit", "e", "quit", "q"}:
                 break
             else:
+                start_time = time.time()
                 response = rag.ask(query)
+                end_time = time.time() - start_time
                 # TODO: RICH printing or tqdm
-                print(f"[ANSWER]: {response.content}")
+                tokens_info = [i[1] for i in response.usage_metadata.items()]
+                print(
+                    f"[ANSWER]: {response.content}\n"
+                    f"Time: {end_time:.3f}s. "
+                    f"Tokens Input: {tokens_info[0]}, Output: {tokens_info[1]}, "
+                    f"Total: {tokens_info[2]}"
+                )
 
             print("-" * 40)
 

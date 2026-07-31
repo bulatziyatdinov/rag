@@ -1,8 +1,9 @@
-from langchain_core.messages import HumanMessage
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
 from .core.embedder import Embedder
 from .core.vector_store import VectorStore
+from .prompt import SYSTEM_PROMPT
 
 
 class RAG:
@@ -35,14 +36,18 @@ class RAG:
     def ask(self, query: str):
         docs = self.vector_store.search(query, 2)
         context = '\n'.join([doc.page_content for doc in docs])
-        # TODO: change prompt
-        augmented_prompt=(("Ты ассистент для ответов на вопросы. Отвечать необходимо "
-                "исключительно по контексту. Дай ответ только на вопрос пользователя "
-                "без лишних предварительных ответу слов") + f"\nКонтекст: {context}\n"
-                + f"\nВопрос пользователя: {query}")
 
-        response = self.model.invoke(
-            [HumanMessage(content=augmented_prompt)]
+        augmented_prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", SYSTEM_PROMPT),
+                ("human", "КОНТЕКСТ: {context}\n\nВопрос: {question}"),
+            ]
         )
+        chain = augmented_prompt | self.model
+
+        response = chain.invoke({
+            "context": context,
+            "question":query,
+        })
 
         return response
