@@ -15,3 +15,8 @@ dependencies = [
     "pymupdf>=1.28.0",
     "python-dotenv>=1.2.2",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.1",
+]
