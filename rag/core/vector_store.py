@@ -46,6 +46,9 @@ class VectorStore:
     def search(self, query: str, k: int = 4) -> list[Document]:
         return self.vector_store.similarity_search(query=query, k=k)
 
+    async def search_async(self, query: str, k: int = 4) -> list[Document]:
+        return await self.vector_store.asimilarity_search(query=query, k=k)
+
     def close(self) -> None:
         if hasattr(self, "client") and self.client is not None:
             self.client.close()

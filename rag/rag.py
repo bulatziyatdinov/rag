@@ -51,3 +51,22 @@ class RAG:
         })
 
         return response
+
+    async def ask_async(self, query: str, k: int = 4):
+        docs = await self.vector_store.search_async(query, k)
+        context = '\n'.join([doc.page_content for doc in docs])
+
+        augmented_prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", SYSTEM_PROMPT),
+                ("human", "КОНТЕКСТ: {context}\n\nВопрос: {question}"),
+            ]
+        )
+        chain = augmented_prompt | self.model
+
+        response = await chain.ainvoke({
+            "context": context,
+            "question":query,
+        })
+
+        return response
