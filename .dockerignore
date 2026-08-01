@@ -20,6 +20,7 @@ store/
 .store/
 data/
 chunks.txt
+ruff.toml
 
 # other
 .env

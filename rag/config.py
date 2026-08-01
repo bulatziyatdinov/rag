@@ -24,6 +24,7 @@ RAG_NUM_CTX = int(os.getenv("RAG_NUM_CTX", "8192"))
 RAG_NUM_PREDICT = int(os.getenv("RAG_NUM_PREDICT", "512"))
 RAG_REASONING = os.getenv("RAG_REASONING", "false").lower() in {'true', 't', '1'}
 RAG_SEED = int(os.getenv("RAG_SEED", "42"))
+RAG_ASK_QUERY_K_LIMIT = int(os.getenv("RAG_ASK_QUERY_K_LIMIT", "4"))
 
 # Chunking settings
 RAG_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "500"))

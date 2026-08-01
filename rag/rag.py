@@ -33,8 +33,8 @@ class RAG:
         self.embedder = embedder
         self.vector_store = vector_store
 
-    def ask(self, query: str):
-        docs = self.vector_store.search(query, 2)
+    def ask(self, query: str, k: int = 4):
+        docs = self.vector_store.search(query, k)
         context = '\n'.join([doc.page_content for doc in docs])
 
         augmented_prompt = ChatPromptTemplate.from_messages(

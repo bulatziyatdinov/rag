@@ -1,6 +1,10 @@
 import time
 
+from rich import print as rprint
+from rich.markdown import Markdown
+
 from .config import (
+    RAG_ASK_QUERY_K_LIMIT,
     RAG_DATA_DIR,
     RAG_EMBEDDING_MODEL,
     RAG_LLM_MODEL,
@@ -69,15 +73,17 @@ def main():
                 break
             else:
                 start_time = time.time()
-                response = rag.ask(query)
+                response = rag.ask(query, RAG_ASK_QUERY_K_LIMIT)
                 end_time = time.time() - start_time
                 # TODO: RICH printing or tqdm
                 tokens_info = [i[1] for i in response.usage_metadata.items()]
-                print(
-                    f"[ANSWER]: {response.content}\n"
-                    f"Time: {end_time:.3f}s. "
-                    f"Tokens Input: {tokens_info[0]}, Output: {tokens_info[1]}, "
-                    f"Total: {tokens_info[2]}"
+                rprint(
+                    Markdown(
+                        f"[ANSWER]: {response.content}  \n"
+                        f"_Time: {end_time:.3f}s. "
+                        f"Tokens Input: {tokens_info[0]}, Output: {tokens_info[1]}, "
+                        f"Total: {tokens_info[2]}_"
+                    )
                 )
 
             print("-" * 40)
