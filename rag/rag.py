@@ -1,3 +1,4 @@
+from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 
@@ -33,38 +34,32 @@ class RAG:
         self.embedder = embedder
         self.vector_store = vector_store
 
-    def ask(self, query: str, k: int = 4):
-        docs = self.vector_store.search(query, k)
-        context = '\n'.join([doc.page_content for doc in docs])
-
         augmented_prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", SYSTEM_PROMPT),
                 ("human", "КОНТЕКСТ: {context}\n\nВопрос: {question}"),
             ]
         )
-        chain = augmented_prompt | self.model
 
-        response = chain.invoke({
+        self.chain = augmented_prompt | self.model
+
+    def ask(self, query: str, k: int = 4) -> AIMessage:
+        docs = self.vector_store.search(query, k)
+        context = '\n\n'.join([f"{doc.metadata}\n{doc.page_content}" for doc in docs])
+        print(context)
+
+        response = self.chain.invoke({
             "context": context,
-            "question":query,
+            "question": query,
         })
 
         return response
 
-    async def ask_async(self, query: str, k: int = 4):
+    async def ask_async(self, query: str, k: int = 4) -> AIMessage:
         docs = await self.vector_store.search_async(query, k)
-        context = '\n'.join([doc.page_content for doc in docs])
+        context = '\n\n'.join([f"{doc.page_content}\n{doc.metadata}" for doc in docs])
 
-        augmented_prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", SYSTEM_PROMPT),
-                ("human", "КОНТЕКСТ: {context}\n\nВопрос: {question}"),
-            ]
-        )
-        chain = augmented_prompt | self.model
-
-        response = await chain.ainvoke({
+        response = await self.chain.ainvoke({
             "context": context,
             "question":query,
         })

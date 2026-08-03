@@ -42,6 +42,7 @@ rag = RAG(
 app = FastAPI()
 
 
+@app.get("/ask")
 @app.get("/ask/{query}")
 async def ask(query: str):
     response = await rag.ask_async(query, RAG_ASK_QUERY_K_LIMIT)
@@ -56,5 +57,5 @@ async def ask(query: str):
 
 @app.get("/health")
 @app.get("/healthcheck")
-async def healthcheck():
+async def health():
     return {"status": "healthy"}

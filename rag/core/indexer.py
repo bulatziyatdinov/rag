@@ -111,6 +111,10 @@ class Indexer:
                     continue
 
                 loaded_docs = loader.load()
+
+                for doc in loaded_docs:
+                    doc.metadata['filename'] = file
+
                 # NOTE: len(documents) != num_docs in many cases, so we need counter
                 num_docs += 1
                 print(file_info + "Загружен")
