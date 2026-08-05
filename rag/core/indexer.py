@@ -8,8 +8,11 @@ warnings.filterwarnings(
 import requests
 from langchain_community.document_loaders import (
     CSVLoader,
+    JSONLoader,
     PyMuPDFLoader,
     TextLoader,
+    UnstructuredHTMLLoader,
+    UnstructuredWordDocumentLoader,
 )
 from langchain_core.documents import Document
 from langchain_excel_loader import StructuredExcelLoader
@@ -104,8 +107,14 @@ class Indexer:
                     loader = PyMuPDFLoader(filepath, mode="single")
                 elif ext == ".csv":
                     loader = CSVLoader(filepath)
-                elif ext in {".xlsx", "xls"}:
+                elif ext in {".xlsx", ".xls"}:
                     loader = StructuredExcelLoader(filepath)
+                elif ext in {".docx", ".doc"}:
+                    loader = UnstructuredWordDocumentLoader(filepath)
+                elif ext == ".json":
+                    loader = JSONLoader(filepath)
+                elif ext in {".html", ".htm"}:
+                    loader = UnstructuredHTMLLoader(filepath)
                 else:
                     print(file_info + f"Пропущен, неизвестный формат [{ext}]")
                     continue
