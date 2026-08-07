@@ -46,7 +46,6 @@ class RAG:
     def ask(self, query: str, k: int = 4) -> AIMessage:
         docs = self.vector_store.search(query, k)
         context = '\n\n'.join([f"{doc.metadata}\n{doc.page_content}" for doc in docs])
-        print(context)
 
         response = self.chain.invoke({
             "context": context,
@@ -57,7 +56,7 @@ class RAG:
 
     async def ask_async(self, query: str, k: int = 4) -> AIMessage:
         docs = await self.vector_store.search_async(query, k)
-        context = '\n\n'.join([f"{doc.page_content}\n{doc.metadata}" for doc in docs])
+        context = '\n\n'.join([f"{doc.metadata}\n{doc.page_content}" for doc in docs])
 
         response = await self.chain.ainvoke({
             "context": context,

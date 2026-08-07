@@ -75,7 +75,7 @@ def main():
                 start_time = time.time()
                 response = rag.ask(query, RAG_ASK_QUERY_K_LIMIT)
                 end_time = time.time() - start_time
-                # TODO: RICH printing or tqdm
+
                 tokens_info = [i[1] for i in response.usage_metadata.items()]
                 rprint(
                     Markdown(
